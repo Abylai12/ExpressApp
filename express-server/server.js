@@ -15,12 +15,13 @@ app.get("/users", (req, res) => {
   res.status(200).json({ users: users });
 });
 
-app.post("/users", (req, res) => {
+app.post("/users/post", (req, res) => {
   const data = fs.readFileSync("./users.json", { encoding: "utf8" });
   const { users } = JSON.parse(data);
   const newUser = {
     id: users.length + 1,
     name: req.body.name,
+    email: req.body.email,
     age: req.body.age,
     imgUrl: req.body.imgUrl,
     jobTitle: req.body.jobTitle,
