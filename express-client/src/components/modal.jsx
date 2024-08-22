@@ -1,30 +1,41 @@
 import { useState, useEffect } from "react";
 
-const Modal = ({ getUsersData }) => {
-  const [open, setOpen] = useState(false);
+const Modal = ({
+  getUsersData,
+  showModal,
+  closeModal,
+  open,
+  setForm,
+  form,
+  taskId,
+}) => {
+  const [error, setError] = useState("");
   const [sent, useSent] = useState(false);
 
-  const showModal = () => {
-    setOpen(true);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prevForm) => ({
+      ...prevForm,
+      [name]: value,
+    }));
   };
-  const closeModal = () => {
-    setOpen(false);
-  };
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [imgUrl, setImgUrl] = useState("");
-  const [position, setPosition] = useState("");
-  // const [form, setForm] = useState({
-  //   name: "",
-  //   email: ""
-  // })
-
   const postData = async () => {
+    const { name, email, imgUrl, jobTitle } = form;
+
+    // Validation: Check if any field is empty
+    if (!name || !email || !imgUrl || !jobTitle) {
+      setError("Please fill out all fields before submitting.");
+      console.log(error);
+      return; // Stop the function if any field is empty
+    }
+
+    setError(""); // Clear error message if all fields are filled
+
     const newEmployee = {
-      name: name,
-      email: email,
-      imgUrl: imgUrl,
-      jobTitle: position,
+      name,
+      email,
+      imgUrl,
+      jobTitle,
     };
 
     try {
@@ -45,12 +56,37 @@ const Modal = ({ getUsersData }) => {
     } catch (error) {
       console.error("Error:", error);
     }
-    setName("");
-    setEmail("");
-    setImgUrl("");
-    setPosition("");
+    setForm({
+      name: "",
+      email: "",
+      imgUrl: "",
+      jobTitle: "",
+    });
     useSent(!sent);
   };
+  const updateEmployerData = async () => {
+    try {
+      const response = await fetch(`http://localhost:8000/users/${taskId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
+
+      if (response.ok) {
+        console.log("User deleted successfully");
+      } else {
+        console.error("Failed to delete user");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+
+    closeModal();
+    useSent(!sent);
+  };
+
   useEffect(() => {
     getUsersData();
   }, [sent]);
@@ -70,16 +106,20 @@ const Modal = ({ getUsersData }) => {
                   type="text"
                   className="grow"
                   placeholder="Daisy"
-                  onChange={(el) => setName(el.target.value)}
+                  name="name"
+                  value={form.name}
+                  onChange={handleChange}
                 />
               </label>
               <label className="input input-bordered flex items-center gap-2">
                 Email
                 <input
-                  type="text"
+                  type="email"
                   className="grow"
+                  name="email"
                   placeholder="daisy@site.com"
-                  onChange={(el) => setEmail(el.target.value)}
+                  value={form.email}
+                  onChange={handleChange}
                 />
               </label>
               <label className="input input-bordered flex items-center gap-2">
@@ -87,7 +127,9 @@ const Modal = ({ getUsersData }) => {
                   type="text"
                   className="grow"
                   placeholder="Image"
-                  onChange={(el) => setImgUrl(el.target.value)}
+                  name="imgUrl"
+                  value={form.imgUrl}
+                  onChange={handleChange}
                 />
               </label>
               <label className="input input-bordered flex items-center gap-2">
@@ -95,13 +137,18 @@ const Modal = ({ getUsersData }) => {
                   type="text"
                   className="grow"
                   placeholder="Position"
-                  onChange={(el) => setPosition(el.target.value)}
+                  name="jobTitle"
+                  value={form.jobTitle}
+                  onChange={handleChange}
                 />
               </label>
             </p>
             <div className="modal-action">
               <button className="btn" onClick={postData}>
                 Submit
+              </button>
+              <button className="btn" onClick={updateEmployerData}>
+                update
               </button>
               <button className="btn" onClick={closeModal}>
                 Close

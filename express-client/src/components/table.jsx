@@ -6,6 +6,27 @@ import Modal from "./modal";
 
 const Table = () => {
   const [users, setUsers] = useState();
+  const [taskId, setTaskId] = useState(-1);
+  const [open, setOpen] = useState(false);
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    imgUrl: "",
+    jobTitle: "",
+  });
+
+  const showModal = () => {
+    setForm({
+      name: "",
+      email: "",
+      imgUrl: "",
+      jobTitle: "",
+    });
+    setOpen(true);
+  };
+  const closeModal = () => {
+    setOpen(false);
+  };
 
   const getUsersData = async () => {
     const res = await fetch("http://localhost:8000/users");
@@ -21,7 +42,15 @@ const Table = () => {
   return (
     <div className="p-4">
       <div className=" w-full flex justify-end">
-        <Modal getUsersData={getUsersData} />
+        <Modal
+          open={open}
+          showModal={showModal}
+          closeModal={closeModal}
+          getUsersData={getUsersData}
+          form={form}
+          setForm={setForm}
+          taskId={taskId}
+        />
       </div>
       <div className="overflow-x-auto">
         <table className="table">
@@ -30,18 +59,13 @@ const Table = () => {
             <HeaderCard />
           </thead>
           <tbody>
-            {/* row 1 */}
-            {users?.map(({ name, jobTitle, email, imgUrl, id }, idx) => (
-              <UserCard
-                getUsersData={getUsersData}
-                key={idx}
-                name={name}
-                jobTitle={jobTitle}
-                email={email}
-                imgUrl={imgUrl}
-                id={id}
-              />
-            ))}
+            <UserCard
+              showModal={showModal}
+              getUsersData={getUsersData}
+              users={users}
+              setForm={setForm}
+              setTaskId={setTaskId}
+            />
           </tbody>
         </table>
       </div>

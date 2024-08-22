@@ -1,1 +1,33 @@
-{"employeeData":[{"id":1,"name":"Brice Swyre","jobTitle":"Tax Accountant","email":"brice12@email.com","age":40,"imgUrl":"https://img.daisyui.com/images/profile/demo/4@94.webp"},{"id":2,"name":"fghfgdh","email":"fghdfg","imgUrl":"hdgdf","jobTitle":"dfghdgfh"}]}
+{
+  "employeeData": [
+    {
+      "id": 1,
+      "name": "Brice Swyre",
+      "jobTitle": "Tax Accountant",
+      "email": "brice12@email.com",
+      "imgUrl": "https://img.daisyui.com/images/profile/demo/4@94.webp"
+    },
+    { "id": 6, "name": "", "email": "", "imgUrl": "", "jobTitle": "" },
+    {
+      "id": 7,
+      "name": "John Cole",
+      "email": "asdfdsf",
+      "imgUrl": "sdfsda",
+      "jobTitle": "asdfdsf"
+    },
+    {
+      "id": 8,
+      "name": "Cole Palmer",
+      "email": "asdf@12gmail.com",
+      "imgUrl": "f",
+      "jobTitle": "Project Manager"
+    },
+    {
+      "id": 9,
+      "name": "John Cole",
+      "email": "John89@gmail.com",
+      "imgUrl": "a",
+      "jobTitle": "Striker"
+    }
+  ]
+}

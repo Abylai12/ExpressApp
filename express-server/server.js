@@ -23,8 +23,16 @@ app.post("/users", (req, res) => {
   const data = fs.readFileSync("./users.json", { encoding: "utf8" });
   const { employeeData } = JSON.parse(data);
 
+  // Find the maximum existing ID in the array
+  const maxId = employeeData.reduce(
+    (max, user) => (user.id > max ? user.id : max),
+    0
+  );
+  console.log(maxId);
+
+  // Assign a new ID that is maxId + 1
   const newUser = {
-    id: employeeData.length + 1,
+    id: maxId + 1,
     ...req.body,
   };
   employeeData.push(newUser);
@@ -42,10 +50,10 @@ app.put("/users/:id", (req, res) => {
   );
 
   if (findIndex > -1) {
-    employeeData[findIndex].age = req.body.age;
+    employeeData[findIndex] = { ...employeeData[findIndex], ...req.body };
 
     fs.writeFileSync("./users.json", JSON.stringify({ employeeData }));
-    res.status(200).json({ changeEmplyerData: employeeData[findIndex] });
+    res.status(200).json({ changeEmployerData: employeeData[findIndex] });
   } else {
     res.status(400).json({ message: "Not found user id" });
   }
