@@ -5,22 +5,23 @@ import HeaderCard from "./header-card";
 import Modal from "./modal";
 
 const Table = () => {
-  const [user, setUsers] = useState();
+  const [users, setUsers] = useState();
+
   const getUsersData = async () => {
     const res = await fetch("http://localhost:8000/users");
+    const { objectUsers } = await res.json();
 
-    const { users } = await res.json();
-    setUsers(users);
+    setUsers(objectUsers);
   };
+
   useEffect(() => {
     getUsersData();
   }, []);
-  console.log(user);
+
   return (
     <div className="p-4">
       <div className=" w-full flex justify-end">
-        {/* <button className="btn btn-info">Add Employee</button> */}
-        <Modal />
+        <Modal getUsersData={getUsersData} />
       </div>
       <div className="overflow-x-auto">
         <table className="table">
@@ -30,13 +31,15 @@ const Table = () => {
           </thead>
           <tbody>
             {/* row 1 */}
-            {user?.map(({ name, jobTitle, email, imgUrl, eid }) => (
+            {users?.map(({ name, jobTitle, email, imgUrl, id }, idx) => (
               <UserCard
-                key={eid}
+                getUsersData={getUsersData}
+                key={idx}
                 name={name}
                 jobTitle={jobTitle}
                 email={email}
                 imgUrl={imgUrl}
+                id={id}
               />
             ))}
           </tbody>

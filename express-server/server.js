@@ -10,38 +10,42 @@ const fs = require("fs");
 // const users = [{ id: 1, name: "Naraa", age: 20 }];
 // / gants taashu zuraasn localhost 8000 zaaj bgaa
 app.get("/users", (req, res) => {
+  //user.json dah dataag oruulj irj bna
   const data = fs.readFileSync("./users.json", { encoding: "utf8" });
-  const { users } = JSON.parse(data);
-  res.status(200).json({ users: users });
+  // data n buleg zuil irj baigaagin employeeData objected bgaa data parse hiij avch bn
+  const { employeeData } = JSON.parse(data);
+  // console.log("getiin employeedata", employeeData);
+  //employeeData g localhost8000/users haygruu users objected employeedatag json bolgoj yavuulj bna
+  res.status(200).json({ objectUsers: employeeData });
 });
 
-app.post("/users/post", (req, res) => {
+app.post("/users", (req, res) => {
   const data = fs.readFileSync("./users.json", { encoding: "utf8" });
-  const { users } = JSON.parse(data);
+  const { employeeData } = JSON.parse(data);
+
   const newUser = {
-    id: users.length + 1,
-    name: req.body.name,
-    email: req.body.email,
-    age: req.body.age,
-    imgUrl: req.body.imgUrl,
-    jobTitle: req.body.jobTitle,
+    id: employeeData.length + 1,
+    ...req.body,
   };
-  users.push(newUser);
-  fs.writeFileSync("./users.json", JSON.stringify({ users }));
-  res.status(201).json({ user: newUser });
+  employeeData.push(newUser);
+  fs.writeFileSync("./users.json", JSON.stringify({ employeeData }));
+
+  res.status(201).json({ addedUser: newUser });
 });
 
 app.put("/users/:id", (req, res) => {
   const data = fs.readFileSync("./users.json", { encoding: "utf8" });
-  const { users } = JSON.parse(data);
-  const findIndex = users.findIndex(
-    (user) => user.id === parseInt(req.params.id)
-  );
-  if (findIndex > -1) {
-    users[findIndex].age = req.body.age;
+  const { employeeData } = JSON.parse(data);
 
-    fs.writeFileSync("./users.json", JSON.stringify({ users }));
-    res.status(200).json({ user: users[findIndex] });
+  const findIndex = employeeData.findIndex(
+    (employer) => employer.id === parseInt(req.params.id)
+  );
+
+  if (findIndex > -1) {
+    employeeData[findIndex].age = req.body.age;
+
+    fs.writeFileSync("./users.json", JSON.stringify({ employeeData }));
+    res.status(200).json({ changeEmplyerData: employeeData[findIndex] });
   } else {
     res.status(400).json({ message: "Not found user id" });
   }
@@ -49,13 +53,13 @@ app.put("/users/:id", (req, res) => {
 
 app.delete("/users/:id", (req, res) => {
   const data = fs.readFileSync("./users.json", { encoding: "utf8" });
-  const { users } = JSON.parse(data);
-  const findIndex = users.findIndex(
-    (user) => user.id === parseInt(req.params.id)
+  const { employeeData } = JSON.parse(data);
+  const findIndex = employeeData.findIndex(
+    (employer) => employer.id === parseInt(req.params.id)
   );
   if (findIndex > -1) {
-    const deleteUser = users.splice(findIndex, 1);
-    fs.writeFileSync("./users.json", JSON.stringify({ users }));
+    const deleteUser = employeeData.splice(findIndex, 1);
+    fs.writeFileSync("./users.json", JSON.stringify({ employeeData }));
     res.status(200).json({ user: deleteUser[0] });
   } else {
     res.status(400).json({ message: "Not found user id" });

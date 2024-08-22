@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 
-const Modal = () => {
+const Modal = ({ getUsersData }) => {
   const [open, setOpen] = useState(false);
+  const [sent, useSent] = useState(false);
+
   const showModal = () => {
     setOpen(true);
   };
@@ -12,22 +14,13 @@ const Modal = () => {
   const [email, setEmail] = useState("");
   const [imgUrl, setImgUrl] = useState("");
   const [position, setPosition] = useState("");
+  // const [form, setForm] = useState({
+  //   name: "",
+  //   email: ""
+  // })
 
-  //   const submit = () => {
-  //     const user = [
-  //       {
-  //         name: name,
-  //         email: email,
-  //         imgUrl: imgUrl,
-  //         position,
-  //         position,
-  //       },
-  //     ];
-  //     closeModal();
-  //     console.log(user);
-  //   };
-  const submit = async () => {
-    const user = {
+  const postData = async () => {
+    const newEmployee = {
       name: name,
       email: email,
       imgUrl: imgUrl,
@@ -35,12 +28,12 @@ const Modal = () => {
     };
 
     try {
-      const response = await fetch("http://localhost:8000/users/post", {
+      const response = await fetch("http://localhost:8000/users", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(user),
+        body: JSON.stringify(newEmployee),
       });
 
       if (response.ok) {
@@ -52,8 +45,15 @@ const Modal = () => {
     } catch (error) {
       console.error("Error:", error);
     }
+    setName("");
+    setEmail("");
+    setImgUrl("");
+    setPosition("");
+    useSent(!sent);
   };
-
+  useEffect(() => {
+    getUsersData();
+  }, [sent]);
   return (
     <div>
       <button className="btn btn-info" onClick={showModal}>
@@ -100,7 +100,7 @@ const Modal = () => {
               </label>
             </p>
             <div className="modal-action">
-              <button className="btn" onClick={submit}>
+              <button className="btn" onClick={postData}>
                 Submit
               </button>
               <button className="btn" onClick={closeModal}>
