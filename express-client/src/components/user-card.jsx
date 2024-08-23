@@ -2,7 +2,14 @@ import React, { useEffect, useState } from "react";
 import { MdEdit } from "react-icons/md";
 import { MdOutlineDelete } from "react-icons/md";
 
-const UserCard = ({ getUsersData, users, showModal, setForm, setTaskId }) => {
+const UserCard = ({
+  getUsersData,
+  users,
+  showModal,
+  setForm,
+  setTaskId,
+  useType,
+}) => {
   const [sent, useSent] = useState(false);
 
   const delelteEmployee = async (id) => {
@@ -29,6 +36,7 @@ const UserCard = ({ getUsersData, users, showModal, setForm, setTaskId }) => {
   }, [sent]);
   const editEmployerData = (id) => {
     showModal();
+    useSent(false);
     setTaskId(id);
 
     const findIndex = users.findIndex((employer) => employer.id === id);

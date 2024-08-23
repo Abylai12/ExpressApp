@@ -8,6 +8,8 @@ const Modal = ({
   setForm,
   form,
   taskId,
+  type,
+  setOpen,
 }) => {
   const [error, setError] = useState("");
   const [sent, useSent] = useState(false);
@@ -19,7 +21,13 @@ const Modal = ({
       [name]: value,
     }));
   };
-  const postData = async () => {
+
+  const submitValue = () => {
+    type ? postEmployerData() : updateEmployerData();
+    setOpen(false);
+  };
+
+  const postEmployerData = async () => {
     const { name, email, imgUrl, jobTitle } = form;
 
     // Validation: Check if any field is empty
@@ -65,6 +73,15 @@ const Modal = ({
     useSent(!sent);
   };
   const updateEmployerData = async () => {
+    const { name, email, imgUrl, jobTitle } = form;
+
+    if (!name || !email || !imgUrl || !jobTitle) {
+      setError("Please fill out all fields before submitting.");
+      console.log(error);
+      return; // Stop the function if any field is empty
+    }
+
+    setError(""); // Clear error message if all fields are filled
     try {
       const response = await fetch(`http://localhost:8000/users/${taskId}`, {
         method: "PUT",
@@ -144,12 +161,12 @@ const Modal = ({
               </label>
             </p>
             <div className="modal-action">
-              <button className="btn" onClick={postData}>
+              <button className="btn" onClick={submitValue}>
                 Submit
               </button>
-              <button className="btn" onClick={updateEmployerData}>
+              {/* <button className="btn" onClick={updateEmployerData}>
                 update
-              </button>
+              </button> */}
               <button className="btn" onClick={closeModal}>
                 Close
               </button>

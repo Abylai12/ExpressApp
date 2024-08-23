@@ -5,16 +5,17 @@ import HeaderCard from "./header-card";
 import Modal from "./modal";
 
 const Table = () => {
-  const [users, setUsers] = useState();
-  const [taskId, setTaskId] = useState(-1);
-  const [open, setOpen] = useState(false);
+  const [type, useType] = useState(false);
+
+  const [users, setUsers] = useState(); // get huselt deh data avhad ashiglasan
+  const [taskId, setTaskId] = useState(-1); // uptadeUserData function deer hereglesen state
+  const [open, setOpen] = useState(false); // useEffect iig huselt yavuulah ued refresh hiihed ashiglasan
   const [form, setForm] = useState({
     name: "",
     email: "",
     imgUrl: "",
     jobTitle: "",
   });
-
   const showModal = () => {
     setForm({
       name: "",
@@ -23,6 +24,7 @@ const Table = () => {
       jobTitle: "",
     });
     setOpen(true);
+    useType(true);
   };
   const closeModal = () => {
     setOpen(false);
@@ -43,6 +45,7 @@ const Table = () => {
     <div className="p-4">
       <div className=" w-full flex justify-end">
         <Modal
+          type={type}
           open={open}
           showModal={showModal}
           closeModal={closeModal}
@@ -50,6 +53,7 @@ const Table = () => {
           form={form}
           setForm={setForm}
           taskId={taskId}
+          setOpen={setOpen}
         />
       </div>
       <div className="overflow-x-auto">
@@ -65,6 +69,7 @@ const Table = () => {
               users={users}
               setForm={setForm}
               setTaskId={setTaskId}
+              useType={useType}
             />
           </tbody>
         </table>
