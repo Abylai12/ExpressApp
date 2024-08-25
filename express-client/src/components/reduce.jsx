@@ -16,18 +16,17 @@ const Reduce = () => {
   // console.log("Final max ID:", maxId);
   const [mood, setMood] = useState(false);
   const [sent, useSent] = useState(false);
-  const showModal = () => {
+  const showModal = (thing) => {
+    thing ? useSent(true) : useSent(false);
     setMood(true);
-    useSent(true);
-    console.log("true");
   };
   const closeModal = () => {
     setMood(false);
   };
-  const editModal = () => {
-    showModal();
-    useSent(false);
-  };
+  // const editModal = () => {
+  //   showModal();
+  //   useSent(false);
+  // };
 
   const submitValue = () => {
     sent ? console.log("POST") : console.log("PUT");
@@ -36,10 +35,20 @@ const Reduce = () => {
 
   return (
     <div>
-      <button className="btn" onClick={showModal}>
+      <button
+        className="btn"
+        onClick={() => {
+          showModal();
+        }}
+      >
         open modal
       </button>
-      <button className="btn" onClick={editModal}>
+      <button
+        className="btn"
+        onClick={() => {
+          showModal("hi");
+        }}
+      >
         edit modal
       </button>
 
