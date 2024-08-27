@@ -5,8 +5,8 @@ import HeaderCard from "./header-card";
 import Modal from "./modal";
 
 const Table = () => {
-  const [type, useType] = useState(false);
-  const [refresh, setRefresh] = useState(false);
+  const [type, useType] = useState(false); // edit bolon submit buttong yalgahad ashiglasan
+  const [refresh, setRefresh] = useState(false); //page refresh hiihed ashiglasan
   const [users, setUsers] = useState(); // get huselt deh data avhad ashiglasan
   const [taskId, setTaskId] = useState(-1); // uptadeUserData function deer hereglesen state
   const [openModal, setModalOpen] = useState(false); // modaliig open attr ashiglaj gargah ued ashiglasan
